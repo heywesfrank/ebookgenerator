@@ -1,0 +1,15 @@
+
+{
+  "name": "openai-nodejs-server",
+  "version": "1.0.0",
+  "description": "A Node.js server to interact with OpenAI's API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "openai": "^4.4",
+    "express": "^4.17.1",
+    "dotenv": "^10.0.0"
+  }
+}

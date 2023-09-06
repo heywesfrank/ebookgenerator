@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ebook Generator</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #apiKeyContainer {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="apiKeyContainer">
+<label for="apiKey">API Key:</label>
+<input id="apiKey" name="apiKey" placeholder="Enter your API Key" type="text"/>
+</div>
+<div class="container">
+<label for="ebookTitle">Ebook Title:</label>
+<input id="ebookTitle" name="ebookTitle" placeholder="Enter the title of the ebook" type="text"/>
+<br/><br/>
+<button id="generateBtn">Generate</button>
+<div id="chapterOutline" style="margin-top: 20px;"></div>
+
+<div id="spinner" style="display: none;">
+<img alt="Loading..." src="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.min.css"/>
+</div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const generateBtn = document.getElementById("generateBtn");
+        const spinner = document.getElementById("spinner");
+        const chapterOutline = document.getElementById("chapterOutline");
+
+        generateBtn.addEventListener("click", function() {
+            // Display the spinner
+            spinner.style.display = "block";
+            
+            // Fetch the 3 chapter outlines from the server
+            const ebookTitle = document.getElementById("ebookTitle").value;
+            fetch("/generate-outline", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ title: ebookTitle })
+            }).then(response => response.json()).then(data => {
+                // Hide the spinner
+                spinner.style.display = "none";
+                
+                // Display the chapter outlines
+                chapterOutline.innerHTML = `
+                    <h3>Chapter 1: ${data.chapter1}</h3>
+                    <h3>Chapter 2: ${data.chapter2}</h3>
+                    <h3>Chapter 3: ${data.chapter3}</h3>
+                `;
+            }).catch(error => {
+                console.error("Error fetching chapter outlines:", error);
+            });
+        });
+    });
+</script>
+</body>
+</html>
